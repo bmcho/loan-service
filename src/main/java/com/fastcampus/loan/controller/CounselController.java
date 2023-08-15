@@ -1,6 +1,5 @@
 package com.fastcampus.loan.controller;
 
-import com.fastcampus.loan.domain.Counsel;
 import com.fastcampus.loan.dto.CounselDTO;
 import com.fastcampus.loan.dto.ResponseDTO;
 import com.fastcampus.loan.service.CounselServiceImpl;
@@ -23,5 +22,10 @@ public class CounselController extends AbstractController {
     @GetMapping("/{counselId}")
     public ResponseDTO<CounselDTO.Response> get(@PathVariable Long counselId) {
         return ok(counselService.get(counselId));
+    }
+
+    @PutMapping("/{counselId}")
+    public ResponseDTO<CounselDTO.Response> update(@PathVariable Long counselId, @RequestBody CounselDTO.Request request) {
+        return ok(counselService.update(counselId, request));
     }
 }

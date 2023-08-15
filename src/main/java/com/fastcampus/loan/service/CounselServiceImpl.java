@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class CounselServiceImpl implements CounselService{
+public class CounselServiceImpl implements CounselService {
 
     private final ModelMapper modelMapper;
     private final CounselRepository counselRepository;
@@ -33,6 +33,24 @@ public class CounselServiceImpl implements CounselService{
         Counsel counsel = counselRepository.findById(counselId).orElseThrow(() -> {
             throw new BaseException(ResultType.SYSTEM_ERROR);
         });
+        return modelMapper.map(counsel, CounselDTO.Response.class);
+    }
+
+    @Override
+    public CounselDTO.Response update(Long counselId, CounselDTO.Request request) {
+        Counsel counsel = counselRepository.findById(counselId).orElseThrow(() -> {
+            throw new BaseException(ResultType.SYSTEM_ERROR);
+        });
+
+        counsel.setName(request.getName());
+        counsel.setCellPhone(request.getCellPhone());
+        counsel.setEmail(request.getEmail());
+        counsel.setMemo(request.getMemo());
+        counsel.setAddress(request.getAddress());
+        counsel.setAddressDetail(request.getAddressDetail());
+        counsel.setZipCode(request.getZipCode());
+
+        counselRepository.save(counsel);
         return modelMapper.map(counsel, CounselDTO.Response.class);
     }
 }
