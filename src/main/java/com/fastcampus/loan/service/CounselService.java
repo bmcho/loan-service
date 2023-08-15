@@ -6,4 +6,6 @@ import com.fastcampus.loan.dto.CounselDTO;
 public interface CounselService {
 
     CounselDTO.Response create(CounselDTO.Request request);
+
+    CounselDTO.Response get(Long counselId);
 }
