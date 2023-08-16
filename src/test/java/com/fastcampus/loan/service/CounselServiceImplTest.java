@@ -121,4 +121,25 @@ class CounselServiceImplTest {
         assertThat(actual.getName()).isEqualTo(request.getName());
     }
 
+    @Test
+    void should_DeleteCounselEntity_When_RequestDeleteCounsel() {
+        Long findId = 1L;
+        Counsel entity = Counsel.builder()
+                .counselId(1L)
+                .name("Test User")
+                .cellPhone("010-1111-1111")
+                .email("Test@gmail.com")
+                .memo("테스트 입니다!")
+                .zipCode("111111")
+                .address("서울시 행복동 행복구")
+                .addressDetail("50번길")
+                .build();
+
+        when(counselRepository.findById(findId)).thenReturn(Optional.ofNullable(entity));
+        counselService.delete(findId);
+
+        assertThat(entity.getIsDeleted()).isEqualTo(true);
+
+    }
+
 }

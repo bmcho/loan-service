@@ -53,4 +53,14 @@ public class CounselServiceImpl implements CounselService {
         counselRepository.save(counsel);
         return modelMapper.map(counsel, CounselDTO.Response.class);
     }
+
+    @Override
+    public void delete(Long counselId) {
+        Counsel counsel = counselRepository.findById(counselId).orElseThrow(() -> {
+            throw new BaseException(ResultType.SYSTEM_ERROR);
+        });
+        counsel.setIsDeleted(true);
+        counselRepository.save(counsel);
+    }
+
 }
