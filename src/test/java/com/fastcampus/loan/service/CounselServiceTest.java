@@ -2,7 +2,6 @@ package com.fastcampus.loan.service;
 
 import com.fastcampus.loan.domain.Counsel;
 import com.fastcampus.loan.dto.CounselDTO;
-import com.fastcampus.loan.dto.ResponseDTO;
 import com.fastcampus.loan.exception.BaseException;
 import com.fastcampus.loan.exception.ResultType;
 import com.fastcampus.loan.repository.CounselRepository;
@@ -22,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class CounselServiceImplTest {
+class CounselServiceTest {
 
     @InjectMocks
     private CounselServiceImpl counselService;

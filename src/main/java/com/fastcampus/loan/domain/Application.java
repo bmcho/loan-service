@@ -9,28 +9,29 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@Entity
 @Getter
 @Setter
-@Entity
 @Builder
-@DynamicInsert
-@DynamicUpdate
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicInsert
+@DynamicUpdate
 @Where(clause = "is_deleted=false")
 public class Application extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, updatable = false)
     private Long applicationId;
 
     @Column(columnDefinition = "varchar(12) DEFAULT NULL COMMENT '신청자'")
     private String name;
-    @Column(columnDefinition = "varchar(13) DEFAULT NULL COMMENT '전화번호")
+    @Column(columnDefinition = "varchar(13) DEFAULT NULL COMMENT '전화번호'")
     private String cellPhone;
-    @Column(columnDefinition = "varchar(50) DEFAULT NULL COMMENT '신청자 이메일")
+    @Column(columnDefinition = "varchar(50) DEFAULT NULL COMMENT '신청자 이메일'")
     private String email;
-    @Column(columnDefinition = "decimal(5,4) DEFAULT NULL COMMENT '금리")
+    @Column(columnDefinition = "decimal(5,4) DEFAULT NULL COMMENT '금리'")
     private BigDecimal interestRate;
     @Column(columnDefinition = "decimal(5,4) DEFAULT NULL COMMENT '취급수수료'")
     private BigDecimal fee;
@@ -40,5 +41,4 @@ public class Application extends BaseEntity {
     private BigDecimal hopeAmount;
     @Column(columnDefinition = "datetime DEFAULT NULL COMMENT '신청일자'")
     private LocalDateTime appliedAt;
-
 }
