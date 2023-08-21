@@ -69,7 +69,31 @@ class ApplicationServiceTest {
         ApplicationDTO.Response actual = applicationService.get(applicationId);
 
         assertThat(actual.getApplicationId()).isEqualTo(applicationId);
+    }
 
+    @Test
+    void should_ReturnResponseEntity_When_RequestAndUpdateEntity() {
+        Long applicationId = 1L;
+
+        Application entity = Application.builder()
+                .applicationId(applicationId)
+                .name("Test Name")
+                .cellPhone("0000-1111-2222")
+                .email("test@gail.com")
+                .hopeAmount(BigDecimal.valueOf(5000000))
+                .build();
+
+        ApplicationDTO.Request request = ApplicationDTO.Request.builder()
+                .name("Test Name")
+                .cellPhone("0000-1111-2222")
+                .email("test@gail.com")
+                .hopeAmount(BigDecimal.valueOf(1000000))
+                .build();
+
+        when(applicationRepository.findById(applicationId)).thenReturn(Optional.ofNullable(entity));
+        ApplicationDTO.Response actual = applicationService.update(applicationId, request);
+
+        assertThat(actual.getHopeAmount()).isEqualTo(BigDecimal.valueOf(1000000));
     }
 
 }
