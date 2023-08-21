@@ -96,4 +96,22 @@ class ApplicationServiceTest {
         assertThat(actual.getHopeAmount()).isEqualTo(BigDecimal.valueOf(1000000));
     }
 
+    @Test
+    void should_DeleteApplicationEntity_When_RequestApplicationId() {
+        Long applicationId = 1L;
+
+        Application entity = Application.builder()
+                .applicationId(applicationId)
+                .name("Test Name")
+                .cellPhone("0000-1111-2222")
+                .email("test@gail.com")
+                .hopeAmount(BigDecimal.valueOf(5000000))
+                .build();
+
+        when(applicationRepository.findById(applicationId)).thenReturn(Optional.ofNullable(entity));
+        applicationService.delete(applicationId);
+
+        assertThat(entity.getIsDeleted()).isEqualTo(true);
+    }
+
 }
