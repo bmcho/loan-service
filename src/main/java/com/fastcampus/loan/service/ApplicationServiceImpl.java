@@ -2,6 +2,8 @@ package com.fastcampus.loan.service;
 
 import com.fastcampus.loan.domain.Application;
 import com.fastcampus.loan.dto.ApplicationDTO;
+import com.fastcampus.loan.exception.BaseException;
+import com.fastcampus.loan.exception.ResultType;
 import com.fastcampus.loan.repository.ApplicationRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -24,5 +26,14 @@ public class ApplicationServiceImpl implements ApplicationService {
         Application applied = applicationRepository.save(application);
 
         return modelMapper.map(applied, ApplicationDTO.Response.class);
+    }
+
+    @Override
+    public ApplicationDTO.Response get(Long applicationId) {
+        Application application = applicationRepository.findById(applicationId).orElseThrow(() -> {
+            throw new BaseException(ResultType.SYSTEM_ERROR);
+        });
+
+        return modelMapper.map(application, ApplicationDTO.Response.class);
     }
 }
