@@ -1,8 +1,11 @@
 package com.fastcampus.loan.service;
 
 import com.fastcampus.loan.domain.Application;
+import com.fastcampus.loan.domain.Terms;
 import com.fastcampus.loan.dto.ApplicationDTO;
+import com.fastcampus.loan.repository.AcceptTermsRepository;
 import com.fastcampus.loan.repository.ApplicationRepository;
+import com.fastcampus.loan.repository.TermsRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -10,8 +13,11 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,6 +32,10 @@ class ApplicationServiceTest {
 
     @Mock
     private ApplicationRepository applicationRepository;
+    @Mock
+    private TermsRepository termsRepository;
+    @Mock
+    private AcceptTermsRepository acceptTermsRepository;
 
     @Spy
     private ModelMapper modelMapper;
@@ -112,6 +122,37 @@ class ApplicationServiceTest {
         applicationService.delete(applicationId);
 
         assertThat(entity.getIsDeleted()).isEqualTo(true);
+    }
+
+    @Test
+    void Should_AddAcceptTerms_When_RequestAcceptTermsOfApplication() {
+        Terms entity1 = Terms.builder()
+                .termsId(1L)
+                .name("약관1")
+                .termsDetailUrl("https://naver.com")
+                .build();
+
+        Terms entity2 = Terms.builder()
+                .termsId(2L)
+                .name("약관1")
+                .termsDetailUrl("https://naver.com")
+                .build();
+
+        List<Long> acceptTerms = Arrays.asList(1L, 2L);
+
+        ApplicationDTO.AcceptTerms request = ApplicationDTO.AcceptTerms.builder()
+                .acceptTermsIds(acceptTerms)
+                .build();
+
+        Long findId = 1L;
+
+        when(applicationRepository.findById(findId)).thenReturn(Optional.ofNullable(Application.builder().applicationId(findId).build()));
+        when(termsRepository.findAll(Sort.by(Sort.Direction.ASC, "termsId"))).thenReturn(List.of(entity1, entity2));
+
+        Boolean actual = applicationService.acceptTerms(findId, request);
+
+        assertThat(actual).isTrue();
+
     }
 
 }
