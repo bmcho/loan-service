@@ -4,7 +4,6 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 public class JudgmentDTO implements Serializable {
@@ -16,7 +15,7 @@ public class JudgmentDTO implements Serializable {
     @Builder
     public static class Request {
         private Long applicationId;
-        private String   name;
+        private String name;
         private BigDecimal approvalAmount;
     }
 
@@ -26,7 +25,7 @@ public class JudgmentDTO implements Serializable {
     @Setter
     @Builder
     public static class Response {
-        private Long judgementId;
+        private Long judgmentId;
         private Long applicationId;
         private String name;
         private BigDecimal approvalAmount;

@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class JudgmentServiceImpl implements JudgmentService {
@@ -26,6 +28,27 @@ public class JudgmentServiceImpl implements JudgmentService {
 
         Judgment saved = judgmentRepository.save(modelMapper.map(request, Judgment.class));
         return modelMapper.map(saved, JudgmentDTO.Response.class);
+    }
+
+    @Override
+    public JudgmentDTO.Response get(Long judgmentId) {
+        Judgment judgment = judgmentRepository.findById(judgmentId).orElseThrow(() -> {
+            throw new BaseException(ResultType.SYSTEM_ERROR);
+        });
+        return modelMapper.map(judgment, JudgmentDTO.Response.class);
+    }
+
+    @Override
+    public JudgmentDTO.Response getJudgmentOfApplication(Long applicationId) {
+        if (!isPresentApplication(applicationId)) {
+            throw new BaseException(ResultType.SYSTEM_ERROR);
+        }
+
+        Judgment judgment = judgmentRepository.findByApplicationId(applicationId).orElseThrow(() -> {
+            throw new BaseException(ResultType.SYSTEM_ERROR);
+        });
+
+        return modelMapper.map(judgment, JudgmentDTO.Response.class);
     }
 
     private boolean isPresentApplication(Long applicationId) {

@@ -58,4 +58,32 @@ public class JudgmentServiceTest {
         assertThat(actual.getApplicationId()).isEqualTo(judgment.getApplicationId());
     }
 
+    @Test
+    void Should_ReturnResponseJudgmentEntity_When_RequestExistJudgment() {
+        Judgment judgment = Judgment.builder()
+                .judgmentId(1L)
+                .build();
+
+        when(judgmentRepository.findById(1L)).thenReturn(Optional.ofNullable(judgment));
+
+        JudgmentDTO.Response actual = judgmentService.get(1L);
+
+        assertThat(actual.getJudgmentId()).isEqualTo(1L);
+    }
+
+    @Test
+    void Should_ReturnResponseJudgmentEntity_When_RequestExistApplication() {
+        Judgment judgment = Judgment.builder()
+                .judgmentId(2L)
+                .applicationId(1L)
+                .build();
+
+        when(applicationRepository.findById(1L)).thenReturn(Optional.ofNullable(Application.builder().build()));
+        when(judgmentRepository.findByApplicationId(1L)).thenReturn(Optional.ofNullable(judgment));
+
+        JudgmentDTO.Response actual = judgmentService.getJudgmentOfApplication(1L);
+        assertThat(actual.getJudgmentId()).isEqualTo(2L);
+        assertThat(actual.getApplicationId()).isEqualTo(1L);
+    }
+
 }
