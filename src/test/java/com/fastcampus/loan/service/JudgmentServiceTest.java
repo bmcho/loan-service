@@ -1,6 +1,7 @@
 package com.fastcampus.loan.service;
 
 import com.fastcampus.loan.domain.Application;
+import com.fastcampus.loan.domain.Counsel;
 import com.fastcampus.loan.domain.Judgment;
 import com.fastcampus.loan.dto.JudgmentDTO;
 import com.fastcampus.loan.repository.ApplicationRepository;
@@ -110,6 +111,21 @@ public class JudgmentServiceTest {
         assertThat(actual.getJudgmentId()).isEqualTo(1L);
         assertThat(actual.getName()).isEqualTo(request.getName());
         assertThat(actual.getApprovalAmount()).isEqualTo(request.getApprovalAmount());
+    }
+
+    @Test
+    void should_DeleteJudgmentEntity_When_RequestDeleteJudgment() {
+        Long findId = 1L;
+        Judgment judgment = Judgment.builder()
+                .judgmentId(1L)
+                .name("Before Test Mem")
+                .approvalAmount(new BigDecimal("1000000"))
+                .build();
+
+        when(judgmentRepository.findById(findId)).thenReturn(Optional.ofNullable(judgment));
+        judgmentService.delete(findId);
+
+        assertThat(judgment.getIsDeleted()).isEqualTo(true);
     }
 
 }
