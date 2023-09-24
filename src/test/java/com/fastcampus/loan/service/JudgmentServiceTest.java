@@ -86,4 +86,30 @@ public class JudgmentServiceTest {
         assertThat(actual.getApplicationId()).isEqualTo(1L);
     }
 
+    @Test
+    void Should_ReturnResponseJudgmentEntity_When_RequestUpdateExistJudgmentInfo() {
+
+        Judgment judgment = Judgment.builder()
+                .judgmentId(1L)
+                .name("Before Test Mem")
+                .approvalAmount(new BigDecimal("1000000"))
+                .build();
+
+
+        JudgmentDTO.Request request = JudgmentDTO.Request.builder()
+                .name("Test Mem")
+                .approvalAmount(new BigDecimal("5000000"))
+                .build();
+
+
+        when(judgmentRepository.findById(1L)).thenReturn(Optional.ofNullable(judgment));
+        when(judgmentRepository.save(any(Judgment.class))).thenReturn(judgment);
+
+        JudgmentDTO.Response actual = judgmentService.update(1L, request);
+
+        assertThat(actual.getJudgmentId()).isEqualTo(1L);
+        assertThat(actual.getName()).isEqualTo(request.getName());
+        assertThat(actual.getApprovalAmount()).isEqualTo(request.getApprovalAmount());
+    }
+
 }
