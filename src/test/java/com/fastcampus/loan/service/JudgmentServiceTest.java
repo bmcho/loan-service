@@ -3,6 +3,7 @@ package com.fastcampus.loan.service;
 import com.fastcampus.loan.domain.Application;
 import com.fastcampus.loan.domain.Counsel;
 import com.fastcampus.loan.domain.Judgment;
+import com.fastcampus.loan.dto.ApplicationDTO;
 import com.fastcampus.loan.dto.JudgmentDTO;
 import com.fastcampus.loan.repository.ApplicationRepository;
 import com.fastcampus.loan.repository.JudgmentRepository;
@@ -126,6 +127,29 @@ public class JudgmentServiceTest {
         judgmentService.delete(findId);
 
         assertThat(judgment.getIsDeleted()).isEqualTo(true);
+    }
+
+    @Test
+    void should_ReturnApplicationGrantEntity_When_RequestGrantApprovalAmountOfApplication() {
+        Long judgmentId = 1L;
+        Long applicationId = 1L;
+        Judgment judgment = Judgment.builder()
+                .judgmentId(judgmentId)
+                .applicationId(applicationId)
+                .approvalAmount(new BigDecimal("1000000"))
+                .build();
+
+        Application application = Application.builder()
+                .applicationId(applicationId)
+                .build();
+
+        when(judgmentRepository.findById(judgmentId)).thenReturn(Optional.ofNullable(judgment));
+        when(applicationRepository.findById(applicationId)).thenReturn(Optional.ofNullable(application));
+
+        ApplicationDTO.GrantAmount grant = judgmentService.grant(judgmentId);
+
+        assertThat(grant.getApprovalAmount()).isEqualTo(judgment.getApprovalAmount());
+
     }
 
 }
